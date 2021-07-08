@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else {
 				postId = linkUrl.search;
 			}
-
+			link.dataset.oldUrl = linkUrl;
 			link.href = vnBase + postId;
 			console.log(vnBase + postId)
 		}
