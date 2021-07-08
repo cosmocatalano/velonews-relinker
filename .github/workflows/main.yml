@@ -1,6 +1,8 @@
-name: minify
+name: hello-world
 on: push
 jobs:
+  my-job:
+    runs-on: ubuntu-latest
     steps:
-        - name: Auto Minify
-          uses: nizarmah/auto-minify@v2.0
+      - name: my-step
+        run: nizarmah/auto-minify@v2.0
