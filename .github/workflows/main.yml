@@ -11,9 +11,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
-
-      - name: Minify Action
-        uses: anthonyftwang/minify-action@v1.0.1
+          
+      - name: Auto Minify
+        uses: nizarmah/auto-minify@v2.0
 
       # Auto-commit to repository
       - uses: stefanzweifel/git-auto-commit-action@v4
