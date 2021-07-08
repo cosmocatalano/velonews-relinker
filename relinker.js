@@ -15,19 +15,21 @@ const vnBase = "https://velonews.com?p="
 //a place to put the WP post ID
 let postId = "";
 
+//storing changed Urls
+const changedUrls = new Map();
+
 document.addEventListener("DOMContentLoaded", function(event) { 
 
 	//get all the links
 	let pageLinks = document.querySelectorAll("a");
 
-	for (link of pageLinks) {
+	for (let link of pageLinks) {
 
 		//make each href attribute a URL
 		let linkUrl = new URL(link.href);
 
 		//is it velonews?
 		if (linkUrl.hostname === "velonews.competitor.com" || linkUrl.hostname === "velonews.com") {
-			console.log(linkUrl.pathname);
 
 			//if there's no direct query id
 			if (!linkUrl.search) {
@@ -46,9 +48,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else {
 				postId = linkUrl.search;
 			}
-			link.dataset.oldUrl = linkUrl;
-			link.href = vnBase + postId;
-			console.log(vnBase + postId)
+			
+			// storing old value as data attribute
+			link.dataset.originalurl = linkUrl;
+
+			//storing urls
+			let oldUrl = link.href;
+			let newUrl = vnBase + postId;
+
+			//updating link 
+			link.href = newUrl;
+
+			//adding to collection of changed links
+			changedUrls.set(oldUrl, newUrl);
 		}
 	}
+	//output changes
+	console.log("velonews-relinker updated " + changedUrls.size + " urls:");
+	for (let urls of changedUrls) {
+		console.log("updated " + urls[0] + " to " + urls[1]);
+	}
+	console.log("more info: https://github.com/cosmocatalano/velonews-relinker");
 });
