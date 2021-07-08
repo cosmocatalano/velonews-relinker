@@ -1,0 +1,10 @@
+name: "autoMinify"
+  on:
+    push:
+      branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Auto Minify
+      uses: nizarmah/auto-minify@v2.0
