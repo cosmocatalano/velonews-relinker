@@ -2,7 +2,7 @@
 fixes legacy VeloNews links on the fly for your website and/or blog
 
 ## the problem
-*[VeloNews](https://velonews.com)* is one of the oldest cycling publications in the US. Despite effectively being the sports' periodical of record, many of the publication's older URLs were broken by a series of platform and ownership changes between 2008 and 2019. 
+*[VeloNews](https://velonews.com)* is one of the oldest cycling publications in the US. Despite effectively being the sports' periodical of record, many of the publication's older URLs were broken by a series of platform and ownership changes between 2008 and 2017. 
 
 As former *VN* technical staff noted after the [the first time I tried to fix this problem](https://www.cyclocosm.com/2011/12/velonews-dead-link-article-finder/), the unique identifiers for content have been preserved throughout these changes, but as of July 2021, a tranlsation layer connecting links to to this content has not been constructed—and, until *VN*'s ownership regains access to the `velonews.competitor.com` domain, any solution they do implement will remain incomplete.
 
