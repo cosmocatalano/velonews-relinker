@@ -1,7 +1,6 @@
 name: minify
 on: push
 jobs:
-    runs-on: ubuntu-latest
     steps:
     - name: Auto Minify
       uses: nizarmah/auto-minify@v2.0
