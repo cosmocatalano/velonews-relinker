@@ -1,8 +1,22 @@
-name: hello-world
-on: push
+name: Minify Workflow
+on:
+  push:
+    branches: [ main ]
+
 jobs:
-  my-job:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: my-step
-        run: nizarmah/auto-minify@v2.0
+      # Checks-out your repository
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Minify Action
+        uses: anthonyftwang/minify-action@v1.0.1
+
+      # Auto-commit to repository
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Minify source code
+          branch: ${{ github.ref }}
