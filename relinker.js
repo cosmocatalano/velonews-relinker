@@ -52,9 +52,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 						if ( lastSlug.includes(".html") ) {
 							postId = lastSlug;
 
-						//otherwise assumes working URL
+						//let's replace competitor.com and assume it works 
 						} else {
-							changedUrls.set(link.href, link.href);
+							let domainOnly = link.href.replace(".competitor.com", ".com");
+							changedUrls.set(link.href, domainOnly);
+							link.href = domainOnly;
 							continue;
 						}
 
