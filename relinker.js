@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		let linkUrl = new URL(link.href);
 
 		//is it velonews?
-		if (linkUrl.hostname === "velonews.competitor.com" || linkUrl.hostname === "velonews.com") {
+		if (linkUrl.hostname === "velonews.competitor.com" || linkUrl.hostname === "www.velonews.com" || linkUrl.hostname === "velonews.com") {
 
 			//if there's no direct query id
 			if (!linkUrl.search) {
@@ -41,8 +41,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				if ( noSlash.indexOf('_') !== -1 ) {
 					postId = noSlash.split('_')[1];
 				} else {
-					//otherwise we can be fairly certain it's the last section of the pathname
-					postId = noSlash.split("/")[noSlash.split("/").length - 1];
+					//getting the last section of the pathname
+					let lastSlug = noSlash.split("/")[noSlash.split("/").length - 1];
+
+					//checking for letters which would indicate this is a post-2017 URL that doesn't need correction
+					let hasLetters = /[a-zA-Z]/g;
+					if ( hasLetters.test(lastSlug) ) {
+				
+						//checking for very old URLs ending in ".html"
+						if ( lastSlug.includes(".html") ) {
+							postId = lastSlug;
+
+						//otherwise assumes working URL
+						} else {
+							changedUrls.set(link.href, link.href);
+							continue;
+						}
+
+					//no letters detected
+					} else {
+						postId = lastSlug;
+					}
 				}
 			//direct query ID always works
 			} else {
@@ -64,9 +83,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 	}
 	//output changes
-	console.log("velonews-relinker updated " + changedUrls.size + " urls:");
+	console.log("velonews-relinker found " + changedUrls.size + " urls:");
 	for (let urls of changedUrls) {
-		console.log("updated " + urls[0] + " to " + urls[1]);
+		if (urls[0] === urls[1]) {
+			console.log("did not update likely-working " + urls[0]);
+		} else {
+			console.log("updated " + urls[0] + " to " + urls[1]);
+		}
 	}
 	console.log("more info: https://github.com/cosmocatalano/velonews-relinker");
 });
