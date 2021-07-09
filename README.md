@@ -17,5 +17,5 @@ You can install this script on your blog or website by adding the following scri
 `<script src="https://cdn.jsdelivr.net/gh/cosmocatalano/velonews-relinker@v1.0.0/relinker.min.js"></script>`
 
 ## caveats
-This will re-write **all** *VN* links on a given page, whether they currently resolve or not, and makes no effort to determine whether the translated links resolve as intended. This script also logs any links it updates in the console.
+This makes only a basic effort to not re-write functional *VN* links, and does not test whether either the old or translated links resolve as intended. This script also logs any links it updates in the console.
 
