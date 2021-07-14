@@ -9,8 +9,21 @@ function clearEnd(target, badChar, pos = 1) {
 	return cleared;
 }
 
-//a usable URL base
-const vnBase = "https://velonews.com?p="
+//some regexes
+const competitorUrl = /velonews\.competitor\.com\/20[0-9]{2}\//g;
+const liveUrl = /velonews\.com\/(tick|live)\//g;
+const competitorImg = /competitor\.com\/(.*?).jpg/g
+const veryoldImg = /velonews\.com(\S*?).(f|preview).jpg/g
+const veryoldUrl = /velonews\.com\/(.*?)\.htm/g
+const noslugUrl = /articles\/[0-9]+$/g;
+
+
+//some strings
+const competitorBase = "velonews.competitor.com";
+
+const vnBase = "https://velonews.com?p=";
+const domainBase = "https://velonews.com";
+const wbBase = "https://web.archive.org/web/2000/"; //for the oldest version
 
 //a place to put the WP post ID
 let postId = "";
@@ -25,65 +38,64 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	for (let link of pageLinks) {
 
+		let clearedUrl = clearEnd(link.href);
+
 		//make each href attribute a URL
-		let linkUrl = new URL(link.href);
+		let linkUrl = new URL(clearedUrl);
 
 		//is it velonews?
 		if (linkUrl.hostname === "velonews.competitor.com" || linkUrl.hostname === "www.velonews.com" || linkUrl.hostname === "velonews.com") {
 
-			//if there's no direct query id
-			if (!linkUrl.search) {
-
-				//remove the trailing slash
-				let noSlash = clearEnd(linkUrl.pathname, '/');
-
-				//underscore always sets off the WP post ID
-				if ( noSlash.indexOf('_') !== -1 ) {
-					postId = noSlash.split('_')[1];
-				} else {
-					//getting the last section of the pathname
-					let lastSlug = noSlash.split("/")[noSlash.split("/").length - 1];
-
-					//checking for letters which would indicate this is a post-2017 URL that doesn't need correction
-					let hasLetters = /[a-zA-Z]/g;
-					if ( hasLetters.test(lastSlug) ) {
-				
-						//checking for very old URLs ending in ".html"
-						if ( lastSlug.includes(".html") ) {
-							postId = lastSlug;
-
-						//let's replace competitor.com and assume it works 
-						} else {
-							let domainOnly = link.href.replace(".competitor.com", ".com");
-							changedUrls.set(link.href, domainOnly);
-							link.href = domainOnly;
-							continue;
-						}
-
-					//no letters detected
-					} else {
-						postId = lastSlug;
-					}
-				}
-			//direct query ID always works
-			} else {
-				postId = linkUrl.search;
+			//if there's no direct query id or path (i.e., if it's the homepage)
+			if (!linkUrl.search && linkUrl.pathname === "/") {
+				changedUrls.set(link.href, domainBase);
+				link.href = "https://velonews.com";
+				continue;
 			}
-			
-			// storing old value as data attribute
-			link.dataset.originalurl = linkUrl;
 
-			//storing urls
-			let oldUrl = link.href;
-			let newUrl = vnBase + postId;
+			//if it's a competitor URL
+			if (linkUrl.hostname === "velonews.competitor.com") {
 
-			//updating link 
-			link.href = newUrl;
+				//if it matches domain/year WP format, remove competitor
+				if ( linkUrl.href.match(competitorUrl) ) {
+					changedUrls.set(link.href, domainBase + link.pathname);
+					link.href = domainBase + link.pathname;
+					continue;
+				} else { //eg "velonews.competitior.com/2010-tour-de-france-stage-19"
+					changedUrls.set(link.href, wbBase + link.href);
+					link.href = wbBase + link.href;
+					continue;
+				}
+			}
 
-			//adding to collection of changed links
-			changedUrls.set(oldUrl, newUrl);
+			//if it's an old image or live report URL, VN doesn't have it, pray Wayback Machine has it
+			if ( linkUrl.href.match(liveUrl) || linkUrl.href.match(veryoldImg) ) {
+				changedUrls.set(link.href, wbBase + link.href);
+				link.href = wbBase + link.href;
+				continue;
+			}
+
+			//if it's a very old, non image URL
+			if ( linkUrl.href.match(veryoldUrl) ) {
+				postId = link.pathname.split("/")[link.pathname.split("/").length - 1];
+				changedUrls.set(link.href, vnBase + postId);
+				link.href = vnBase + postId;
+				continue;
+			}
+
+			//if it's a naked article/id URL 
+			if ( linkUrl.pathname.match(noslugUrl) ) {
+				postId = link.pathname.split("/")[link.pathname.split("/").length - 1];
+				changedUrls.set(link.href, vnBase + postId);
+				link.href = vnBase + postId;
+				continue;
+			}
+
+			//if all previous checks pass and we made it this far, assume the link works
+			changedUrls.set(link.href, link.href);
 		}
 	}
+
 	//output changes
 	console.log("velonews-relinker found " + changedUrls.size + " urls:");
 	for (let urls of changedUrls) {
