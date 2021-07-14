@@ -14,7 +14,7 @@ To address this, I wrote a script that scans an HTML document for any `velonews.
 ## installation
 You can install this script on your blog or website by adding the following script to any HTML page:
 
-`<script src="https://cdn.jsdelivr.net/gh/cosmocatalano/velonews-relinker@v1.0.2/relinker.min.js"></script>`
+`<script src="https://cdn.jsdelivr.net/gh/cosmocatalano/velonews-relinker@v1.1.0/relinker.min.js"></script>`
 
 ## caveats
 This makes only a basic effort to not re-write functional *VN* links, and does not test whether either the old or translated links resolve as intended. This script also logs any links it updates in the console.
