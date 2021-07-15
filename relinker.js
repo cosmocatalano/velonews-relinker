@@ -56,12 +56,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			//if it's a competitor URL
 			if (linkUrl.hostname === "velonews.competitor.com") {
 
-				//if it matches domain/year WP format, remove competitor
+				//if it matches domain/year WP format remove "competitor" 
+				//e.g. https://velonews.competitor.com/2013/03/news/must-read-french-politician-says-he-ran-into-a-drunk-andy-schleck_277922
 				if ( linkUrl.href.match(competitorUrl) ) {
 					changedUrls.set(link.href, domainBase + link.pathname);
 					link.href = domainBase + link.pathname;
 					continue;
-				} else { //eg "velonews.competitior.com/2010-tour-de-france-stage-19"
+				} else { //e.g. "velonews.competitior.com/2010-tour-de-france-stage-19"
 					changedUrls.set(link.href, wbBase + link.href);
 					link.href = wbBase + link.href;
 					continue;
@@ -69,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 
 			//if it's an old image or live report URL, VN doesn't have it, pray Wayback Machine has it
+			//e.g. https://www.velonews.com/images/int/8806.12445.f.jpg, https://velonews.com/live/text/261.html
 			if ( linkUrl.href.match(liveUrl) || linkUrl.href.match(veryoldImg) ) {
 				changedUrls.set(link.href, wbBase + link.href);
 				link.href = wbBase + link.href;
@@ -76,16 +78,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 
 			//if it's a very old, non image URL
+			//e.g. https://velonews.com/race/int/articles/8867.0.html
 			if ( linkUrl.href.match(veryoldUrl) ) {
-				postId = link.pathname.split("/")[link.pathname.split("/").length - 1];
+				postId = linkUrl.pathname.split("/")[linkUrl.pathname.split("/").length - 1];
 				changedUrls.set(link.href, vnBase + postId);
 				link.href = vnBase + postId;
 				continue;
 			}
 
-			//if it's a naked article/id URL 
+			//if it's a naked article/id URL, e.g.
+			//e.g. https://velonews.com/article/71917
 			if ( linkUrl.pathname.match(noslugUrl) ) {
-				postId = link.pathname.split("/")[link.pathname.split("/").length - 1];
+				postId = linkUrl.pathname.split("/")[linkUrl.pathname.split("/").length - 1];
 				changedUrls.set(link.href, vnBase + postId);
 				link.href = vnBase + postId;
 				continue;
