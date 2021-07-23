@@ -10,8 +10,8 @@ function clearEnd(target, badChar = "/", pos = 1) {
 }
 
 //return portion of url path following the last slash
-function lastSlash(url, delimiter = "/") {
-	lsReturn = url.pathname.split(delimiter)[url.pathname.split(delimiter).length - 1];
+function lastSlash(urlString, delimiter = "/") {
+	lsReturn = urlString.split(delimiter)[urlString.split(delimiter).length - 1];
 	return lsReturn;
 }
 
@@ -28,7 +28,7 @@ const liveUrl = /velonews\.com\/(tick|live)\//g;
 const competitorImg = /competitor\.com\/(.*?).jpg/g
 const veryoldImg = /velonews\.com(\S*?).(f|preview).jpg/g
 const veryoldUrl = /velonews\.com\/(.*?)\.htm/g
-const noslugUrl = /article(s)?\/[0-9]+$/g;
+const articleUrl = /article(s)?\/[0-9]+/g;
 
 
 //some strings
@@ -89,15 +89,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			//if it's a very old, non image URL
 			//e.g. https://velonews.com/race/int/articles/8867.0.html
 			if ( linkUrl.href.match(veryoldUrl) ) {
-				postId = lastSlash(linkUrl);
+				postId = lastSlash(linkUrl.pathname);
 				updateLink(link, vnBase + postId);
 				continue;
 			}
 
 			//if it's a naked article/id URL, e.g.
 			//e.g. https://velonews.com/article/71917
-			if ( linkUrl.pathname.match(noslugUrl) ) {
-				postId = lastSlash(linkUrl);
+			if ( linkUrl.pathname.match(articleUrl) ) {
+				postId = lastSlash( linkUrl.pathname.match(articleUrl)[0] );
 				updateLink(link, vnBase + postId);
 				continue;
 			}
