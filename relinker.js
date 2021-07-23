@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		//is it velonews?
 		if (linkUrl.hostname === "velonews.competitor.com" || linkUrl.hostname === "www.velonews.com" || linkUrl.hostname === "velonews.com") {
-
+			
 			//if there's no direct query id or path (i.e., if it's the homepage)
 			if (!linkUrl.search && linkUrl.pathname === "/") {
 				updateLink(link, domainBase);
@@ -107,13 +107,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}
 
 	//output changes
-	console.log("velonews-relinker found " + changedUrls.size + " urls:");
+	console.log("%c velonews-relinker found " + changedUrls.size + " urls:", "background: #000; color: cyan");
 	for (let urls of changedUrls) {
 		if (urls[0] === urls[1]) {
-			console.log("did not update likely-working " + urls[0]);
+			console.log("\n %c ignored " + urls[0], "background: #000; color: cyan");
 		} else {
-			console.log("updated " + urls[0] + " to " + urls[1]);
+			console.log("\n  %c removed " + urls[0] + "\n %c inserted " + urls[1], "background: #000; color: yellow", "background: #000; color: lime");
 		}
 	}
-	console.log("more info: https://github.com/cosmocatalano/velonews-relinker");
+	console.log("%c more info: https://github.com/cosmocatalano/velonews-relinker", "background: #000; color: cyan");
 });
