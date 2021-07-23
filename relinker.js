@@ -28,7 +28,7 @@ const liveUrl = /velonews\.com\/(tick|live)\//g;
 const competitorImg = /competitor\.com\/(.*?).jpg/g
 const veryoldImg = /velonews\.com(\S*?).(f|preview).jpg/g
 const veryoldUrl = /velonews\.com\/(.*?)\.htm/g
-const noslugUrl = /articles\/[0-9]+$/g;
+const noslugUrl = /article(s)?\/[0-9]+$/g;
 
 
 //some strings
