@@ -1,5 +1,5 @@
-//because JS is bad at trimming
-function clearEnd(target, badChar, pos = 1) {
+//remove slash(es) from end of string
+function clearEnd(target, badChar = "/", pos = 1) {
 	let cleared = false;
 	if ( target[target.length - pos] === badChar) {
 		cleared = clearEnd(target, badChar, pos + 1);
@@ -7,6 +7,19 @@ function clearEnd(target, badChar, pos = 1) {
 		cleared = target.substr(0, (target.length - (pos - 1) ) )
 	}
 	return cleared;
+}
+
+//return portion of url path following the last slash
+function lastSlash(url, delimiter = "/") {
+	lsReturn = url.pathname.split(delimiter)[url.pathname.split(delimiter).length - 1];
+	return lsReturn;
+}
+
+//changes the link
+function updateLink(oldLink, newHref, urlMap = changedUrls) {
+	changedUrls.set(oldLink.href, newHref);
+	oldLink.dataset.originalUrl = oldLink.href;
+	oldLink.href = newHref;
 }
 
 //some regexes
@@ -48,8 +61,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 			//if there's no direct query id or path (i.e., if it's the homepage)
 			if (!linkUrl.search && linkUrl.pathname === "/") {
-				changedUrls.set(link.href, domainBase);
-				link.href = "https://velonews.com";
+				updateLink(link, domainBase);
 				continue;
 			}
 
@@ -59,12 +71,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				//if it matches domain/year WP format remove "competitor" 
 				//e.g. https://velonews.competitor.com/2013/03/news/must-read-french-politician-says-he-ran-into-a-drunk-andy-schleck_277922
 				if ( linkUrl.href.match(competitorUrl) ) {
-					changedUrls.set(link.href, domainBase + link.pathname);
-					link.href = domainBase + link.pathname;
+					updateLink(link, domainBase + link.pathname);
 					continue;
 				} else { //e.g. "velonews.competitior.com/2010-tour-de-france-stage-19"
-					changedUrls.set(link.href, wbBase + link.href);
-					link.href = wbBase + link.href;
+					updateLink(link, wbBase + link.href);
 					continue;
 				}
 			}
@@ -72,26 +82,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			//if it's an old image or live report URL, VN doesn't have it, pray Wayback Machine has it
 			//e.g. https://www.velonews.com/images/int/8806.12445.f.jpg, https://velonews.com/live/text/261.html
 			if ( linkUrl.href.match(liveUrl) || linkUrl.href.match(veryoldImg) ) {
-				changedUrls.set(link.href, wbBase + link.href);
-				link.href = wbBase + link.href;
+				updateLink(link, wbBase + link.href);
 				continue;
 			}
 
 			//if it's a very old, non image URL
 			//e.g. https://velonews.com/race/int/articles/8867.0.html
 			if ( linkUrl.href.match(veryoldUrl) ) {
-				postId = linkUrl.pathname.split("/")[linkUrl.pathname.split("/").length - 1];
-				changedUrls.set(link.href, vnBase + postId);
-				link.href = vnBase + postId;
+				postId = lastSlash(linkUrl);
+				updateLink(link, vnBase + postId);
 				continue;
 			}
 
 			//if it's a naked article/id URL, e.g.
 			//e.g. https://velonews.com/article/71917
 			if ( linkUrl.pathname.match(noslugUrl) ) {
-				postId = linkUrl.pathname.split("/")[linkUrl.pathname.split("/").length - 1];
-				changedUrls.set(link.href, vnBase + postId);
-				link.href = vnBase + postId;
+				postId = lastSlash(linkUrl);
+				updateLink(link, vnBase + postId);
 				continue;
 			}
 
