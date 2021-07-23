@@ -5,6 +5,7 @@ const competitorImg = /competitor\.com\/(.*?).jpg/g;
 const veryoldImg = /velonews\.com(\S*?).(f|preview).jpg/g;
 const veryoldUrl = /velonews\.com\/(.*?)\.htm/g;
 const articleUrl = /article(s)?\/[0-9]+/g;
+const photoUrl = /velonews\.com\/photo(s)?/g;
 
 //some strings
 const competitorBase = "velonews.competitor.com";
@@ -79,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 			//if it's an old image or live report URL, VN doesn't have it, pray Wayback Machine has it
 			//e.g. https://www.velonews.com/images/int/8806.12445.f.jpg, https://velonews.com/live/text/261.html
-			if ( linkUrl.href.match(liveUrl) || linkUrl.href.match(veryoldImg) ) {
+			if ( linkUrl.href.match(liveUrl) || linkUrl.href.match(veryoldImg) || linkUrl.href.match(photoUrl) ) {
 				updateLink(link, wbBase + link.href);
 				continue;
 			}
