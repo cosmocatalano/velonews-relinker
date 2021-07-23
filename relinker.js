@@ -1,39 +1,13 @@
-//remove slash(es) from end of string
-function clearEnd(target, badChar = "/", pos = 1) {
-	let cleared = false;
-	if ( target[target.length - pos] === badChar) {
-		cleared = clearEnd(target, badChar, pos + 1);
-	} else {
-		cleared = target.substr(0, (target.length - (pos - 1) ) )
-	}
-	return cleared;
-}
-
-//return portion of url path following the last slash
-function lastSlash(urlString, delimiter = "/") {
-	lsReturn = urlString.split(delimiter)[urlString.split(delimiter).length - 1];
-	return lsReturn;
-}
-
-//changes the link
-function updateLink(oldLink, newHref, urlMap = changedUrls) {
-	changedUrls.set(oldLink.href, newHref);
-	oldLink.dataset.originalUrl = oldLink.href;
-	oldLink.href = newHref;
-}
-
 //some regexes
 const competitorUrl = /velonews\.competitor\.com\/20[0-9]{2}\//g;
 const liveUrl = /velonews\.com\/(tick|live)\//g;
-const competitorImg = /competitor\.com\/(.*?).jpg/g
-const veryoldImg = /velonews\.com(\S*?).(f|preview).jpg/g
-const veryoldUrl = /velonews\.com\/(.*?)\.htm/g
+const competitorImg = /competitor\.com\/(.*?).jpg/g;
+const veryoldImg = /velonews\.com(\S*?).(f|preview).jpg/g;
+const veryoldUrl = /velonews\.com\/(.*?)\.htm/g;
 const articleUrl = /article(s)?\/[0-9]+/g;
-
 
 //some strings
 const competitorBase = "velonews.competitor.com";
-
 const vnBase = "https://velonews.com?p=";
 const domainBase = "https://velonews.com";
 const wbBase = "https://web.archive.org/web/2000/"; //for the oldest version
@@ -43,6 +17,30 @@ let postId = "";
 
 //storing changed Urls
 const changedUrls = new Map();
+
+//remove slash(es) from end of string
+function clearEnd(target, badChar = "/", pos = 1) {
+	let cleared = false;
+	if ( target[target.length - pos] === badChar) {
+		cleared = clearEnd(target, badChar, pos + 1);
+	} else {
+		cleared = target.substr(0, (target.length - (pos - 1) ) );
+	}
+	return cleared;
+}
+
+//return portion of url path following the last slash
+function lastSlash(urlString, delimiter = "/") {
+	let lsReturn = urlString.split(delimiter)[urlString.split(delimiter).length - 1];
+	return lsReturn;
+}
+
+//changes the link
+function updateLink(oldLink, newHref, urlMap = changedUrls) {
+	changedUrls.set(oldLink.href, newHref);
+	oldLink.dataset.originalUrl = oldLink.href;
+	oldLink.href = newHref;
+}
 
 document.addEventListener("DOMContentLoaded", function(event) { 
 
