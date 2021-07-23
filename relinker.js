@@ -4,7 +4,7 @@ function clearEnd(target, badChar = "/", pos = 1) {
 	if ( target[target.length - pos] === badChar) {
 		cleared = clearEnd(target, badChar, pos + 1);
 	} else {
-		cleared = target.substr(0, (target.length - (pos - 1) ) )
+		cleared = target.substr(0, (target.length - (pos - 1) ) );
 	}
 	return cleared;
 }
@@ -25,9 +25,9 @@ function updateLink(oldLink, newHref, urlMap = changedUrls) {
 //some regexes
 const competitorUrl = /velonews\.competitor\.com\/20[0-9]{2}\//g;
 const liveUrl = /velonews\.com\/(tick|live)\//g;
-const competitorImg = /competitor\.com\/(.*?).jpg/g
-const veryoldImg = /velonews\.com(\S*?).(f|preview).jpg/g
-const veryoldUrl = /velonews\.com\/(.*?)\.htm/g
+const competitorImg = /competitor\.com\/(.*?).jpg/g;
+const veryoldImg = /velonews\.com(\S*?).(f|preview).jpg/g;
+const veryoldUrl = /velonews\.com\/(.*?)\.htm/g;
 const noslugUrl = /articles\/[0-9]+$/g;
 
 
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		if (urls[0] === urls[1]) {
 			console.log("\n %c ignored " + urls[0], "background: #000; color: cyan");
 		} else {
-			console.log("\n  %c removed " + urls[0] + "\n %c inserted " + urls[1], "background: #000; color: yellow", "background: #000; color: lime")
+			console.log("\n  %c removed " + urls[0] + "\n %c inserted " + urls[1], "background: #000; color: yellow", "background: #000; color: lime");
 		}
 	}
 	console.log("%c more info: https://github.com/cosmocatalano/velonews-relinker", "background: #000; color: cyan");
