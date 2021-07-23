@@ -58,6 +58,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		//is it velonews?
 		if (linkUrl.hostname === "velonews.competitor.com" || linkUrl.hostname === "www.velonews.com" || linkUrl.hostname === "velonews.com") {
 			
+			//if data-no-relink is true, skip this link
+			if(link.dataset.noRelink) {
+				changedUrls.set(link.href, link.href);
+				continue;
+			}
+
 			//if there's no direct query id or path (i.e., if it's the homepage)
 			if (!linkUrl.search && linkUrl.pathname === "/") {
 				updateLink(link, domainBase);
