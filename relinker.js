@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			//if there's no direct query id or path (i.e., if it's the homepage)
 			if (!linkUrl.search && linkUrl.pathname === "/") {
 				changedUrls.set(link.href, domainBase);
+				link.dataset.oldUrl = link.href;
 				link.href = "https://velonews.com";
 				continue;
 			}
@@ -60,10 +61,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				//e.g. https://velonews.competitor.com/2013/03/news/must-read-french-politician-says-he-ran-into-a-drunk-andy-schleck_277922
 				if ( linkUrl.href.match(competitorUrl) ) {
 					changedUrls.set(link.href, domainBase + link.pathname);
+					link.dataset.oldUrl = link.href;
 					link.href = domainBase + link.pathname;
 					continue;
 				} else { //e.g. "velonews.competitior.com/2010-tour-de-france-stage-19"
 					changedUrls.set(link.href, wbBase + link.href);
+					link.dataset.oldUrl = link.href;
 					link.href = wbBase + link.href;
 					continue;
 				}
@@ -73,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			//e.g. https://www.velonews.com/images/int/8806.12445.f.jpg, https://velonews.com/live/text/261.html
 			if ( linkUrl.href.match(liveUrl) || linkUrl.href.match(veryoldImg) ) {
 				changedUrls.set(link.href, wbBase + link.href);
+				link.dataset.oldUrl = link.href;
 				link.href = wbBase + link.href;
 				continue;
 			}
@@ -82,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			if ( linkUrl.href.match(veryoldUrl) ) {
 				postId = linkUrl.pathname.split("/")[linkUrl.pathname.split("/").length - 1];
 				changedUrls.set(link.href, vnBase + postId);
+				link.dataset.oldUrl = link.href;
 				link.href = vnBase + postId;
 				continue;
 			}
@@ -91,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			if ( linkUrl.pathname.match(noslugUrl) ) {
 				postId = linkUrl.pathname.split("/")[linkUrl.pathname.split("/").length - 1];
 				changedUrls.set(link.href, vnBase + postId);
+				link.dataset.oldUrl = link.href;
 				link.href = vnBase + postId;
 				continue;
 			}
