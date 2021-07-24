@@ -11,10 +11,14 @@ As the owner of a [long-running cycling blog](https://cyclocosm.com), I wanted t
 
 To address this, I wrote a script that scans an HTML document for any `velonews.com` or `velonews.competitor.com` links, parses them to determine the content's unique identifier, and changes their `href` attribute to a raw query for that identifier (e.g. `https://velonews.com?p=123456`). The old URL is stored as a `data-original-url` attribute on the updated link.
 
-## installation
+## installation & use
 You can install this script on your blog or website by adding the following script to any HTML page:
 
-`<script src="https://cdn.jsdelivr.net/gh/cosmocatalano/velonews-relinker@v1.1.0/relinker.min.js"></script>`
+`<script src="https://cdn.jsdelivr.net/gh/cosmocatalano/velonews-relinker@v1.2.1/relinker.min.js"></script>`
+
+If you want to exlcude any VeloNews links from being translated by this script, add `data-no-relink="true"` to the `<a>` attribute:
+
+`<a href="https://velonews.com/articles/8675390/dont-relink-this-url"`**`data-no-relink="true"`**`>`
 
 ## caveats
 This makes only a basic effort to not re-write functional *VN* links, and does not test whether either the old or translated links resolve as intended. This script also logs any links it updates in the console.
