@@ -18,7 +18,7 @@ You can install this script on your blog or website by adding the following scri
 
 If you want to exlcude any VeloNews links from being translated by this script, add `data-no-relink="true"` to the `<a>` attribute:
 
-`<a href="https://velonews.com/articles/8675390/dont-relink-this-url"`**`data-no-relink="true"`**`>`
+`<a href="https://velonews.com/articles/8675309/dont-relink-this-url"`**`data-no-relink="true"`**`>`
 
 ## caveats
 This makes only a basic effort to not re-write functional *VN* links, and does not test whether either the old or translated links resolve as intended. This script also logs any links it updates in the console.
